@@ -26,6 +26,18 @@ export default {
 		return result
 	},
 
+	getLocalStorage(key) {
+		let result = false
+		if(LocalStorage.has(key)) {
+			result = LocalStorage.getItem(key)
+		}
+		return result
+	},
+
+	updateLocalStorage(key, value) {
+		if(LocalStorage.has(key)) LocalStorage.set(key, value)
+	},
+
 	isLoggedIn() {
 		let result = false
 		const check = this.checkLocalStorage('token')

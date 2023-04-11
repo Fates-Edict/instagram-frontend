@@ -1,10 +1,13 @@
 <template>
   <q-layout view="hHh lpR fFf">
 
-      <q-drawer show-if-above v-model="sidebarExpand.left" side="left" bordered>
+      <q-drawer show-if-above v-model="sidebarExpand.left" side="left" bordered :mini="miniState" :width="350" :mini-width="100">
         <q-list class="q-pa-sm">
-          <q-item clickable dark class="q-pa-lg" @click="$router.push({ name: 'home' })">
+          <q-item v-if="!miniState" clickable dark class="q-pa-lg" @click="$router.push({ name: 'home' })">
             <q-img src="~assets/logo.png" width="45%" />
+          </q-item>
+          <q-item v-else clickable dark class="q-pa-lg" @click="$router.push({ name: 'home' })">
+            <q-img src="~assets/icon.png" width="45%" />
           </q-item>
         </q-list>
         <q-scroll-area :style="'height: ' + ($q.screen.height - 120) + 'px'" class="q-px-md">
@@ -37,7 +40,22 @@ export default {
       sidebarExpand: {
         left: false,
         rght: false
-      }
+      },
+      miniState: false
+    }
+  },
+
+  mounted() {
+    window.addEventListener('mini-local-storage-changed', (event) => {
+      if(event.detail.storage) this.miniState = true
+      else this.miniState = false
+    })
+  },
+
+  watch: {
+    '$q.screen.width'() {
+      if(this.$q.screen.width > 760 && this.$q.screen.width < 1360) this.miniState = true
+      else this.miniState = false
     }
   },
 
