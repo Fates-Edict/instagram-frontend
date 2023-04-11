@@ -5,15 +5,15 @@
 				<q-img src="~assets/logo.png" width="200px" />
       </q-card-section>
 			<q-card-section>
-				<q-form @submit="login" class="row q-px-xl justify-center">
-					<q-input class="col-12 col-lg-8" filled square dense color="grey-7" v-model="dataModel.credential" label="Phone Number / Username" :error="errors.credentials ? true : false" :error-message="errors.credentials" />
-					<q-input :type="visiblePassword ? 'text' : 'password'" class="col-12 col-lg-8" filled square dense color="grey-7" v-model="dataModel.password" label="Password" :error="errors.password ? true : false" :error-message="errors.password">
+				<q-form @submit="login" class="row q-px-lg justify-center">
+					<q-input class="col-12 col-md-8 col-lg-12" filled square dense color="grey-7" v-model="dataModel.credential" label="Phone Number / Username" :error="errors.credentials ? true : false" :error-message="errors.credentials" />
+					<q-input :type="visiblePassword ? 'text' : 'password'" class="col-12 col-md-8 col-lg-12" filled square dense color="grey-7" v-model="dataModel.password" label="Password" :error="errors.password ? true : false" :error-message="errors.password">
 						<template v-slot:append>
 							<q-icon v-if="!visiblePassword" name="visibility" @click="visiblePassword = !visiblePassword" style="cursor: pointer" />
 							<q-icon v-else name="visibility_off" @click="visiblePassword = !visiblePassword" style="cursor: pointer" />
 						</template>
 					</q-input>
-					<q-btn label="Log in" no-caps unelevated color="primary" class="col-12 col-lg-8" type="submit" />
+					<q-btn label="Log in" no-caps unelevated color="primary" class="col-12 col-md-8 col-lg-12" type="submit" />
 				</q-form>
 			</q-card-section>
     </q-card>
@@ -45,6 +45,10 @@ export default {
 		}
 	},
 	created() {
+		const isLoggedIn = this.$Helper.isLoggedIn()
+		if(isLoggedIn) {
+			this.$router.push({ name: 'home' })
+		}
 		useMeta(() => {
 			return {
 				title: 'Login'
@@ -52,20 +56,33 @@ export default {
 		})
 	},
 	methods: {
+		// isLoggedIn() {
+		// 	this.$Helper.checkLocalStorage()
+		// 	// 1. Ketika akses halaman login cek dulu ada token atau ngga
+		// 	// 2. Kalau gaada biarin
+		// 	// 3. Kalau ada, ambil token, lalu check kebenaran token dan expirednya
+		// 	// 4. Kalau ok redirect ke halaman utama
+		// 	// 5. Kalau tokennya salah, hapus token & stay di halaman login
+		// },
 		login() {
 			this.$axios.post('http://127.0.0.1:8000/api/authenticate', this.dataModel)
 			.then((response) => {
-				if(response.status === 200) {
-					console.log(response)
-					// this.$Helper.showNotify(response.data.data)
+				const data = response.data.data
+				if(response.status === 200 && data.token) {
+					this.$Helper.storeLocalStorage('token', data.token)
+					this.$router.push({ name: 'home' })
 				}
-			})
-			.catch((error) => {
-				if(error.response.status === 404) {
+			}).catch((error) => {
+				if(error.response.status === 404)  {
 					this.$Helper.showNotify(error.response.data.message, '', 'red', 'sms_failed')
 					const e = error.response.data.data
 					e.credential ? this.errors.credentials = e.credential : this.errors.credentials = null
 					e.password ? this.errors.password = e.password : this.errors.password = null
+				} else if(error.response.status === 400) {
+					this.$Helper.showNotify(error.response.data.data, '', 'red', 'sms_failed')
+					const e = error.response.data.message
+					e.credential ? this.errors.credentials = e.credential[0] : this.errors.credentials = null
+					e.password ? this.errors.password = e.password[0] : this.errors.password = null
 				}
 			})
 		}

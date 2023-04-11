@@ -5,17 +5,17 @@
 				<q-img src="~assets/logo.png" width="200px" />
       </q-card-section>
 			<q-card-section>
-				<q-form @submit="register" class="row q-px-xl justify-center">
-					<q-input class="col-12 col-lg-8" type="number" filled square dense color="grey-7" v-model="dataModel.phone" label="Phone Number" :error="errors.phone ? true : false" :error-message="errors.phone" />
-					<q-input class="col-12 col-lg-8" filled square dense color="grey-7" v-model="dataModel.name" label="Full Name" :error="errors.name ? true : false" :error-message="errors.name" />
-					<q-input class="col-12 col-lg-8" filled square dense color="grey-7" v-model="dataModel.username" label="Username" :error="errors.username ? true : false" :error-message="errors.username" />
-					<q-input :type="!visiblePassword ? 'password' : 'text'" class="col-12 col-lg-8" filled square dense color="grey-7" v-model="dataModel.password" label="Password" :error="errors.password ? true : false" :error-message="errors.password">
+				<q-form @submit="register" class="row q-px-lg justify-center">
+					<q-input class="col-12 col-md-8 col-lg-12" type="number" filled square dense color="grey-7" v-model="dataModel.phone" label="Phone Number" :error="errors.phone ? true : false" :error-message="errors.phone" />
+					<q-input class="col-12 col-md-8 col-lg-12" filled square dense color="grey-7" v-model="dataModel.name" label="Full Name" :error="errors.name ? true : false" :error-message="errors.name" />
+					<q-input class="col-12 col-md-8 col-lg-12" filled square dense color="grey-7" v-model="dataModel.username" label="Username" :error="errors.username ? true : false" :error-message="errors.username" />
+					<q-input :type="!visiblePassword ? 'password' : 'text'" class="col-12 col-md-8 col-lg-12" filled square dense color="grey-7" v-model="dataModel.password" label="Password" :error="errors.password ? true : false" :error-message="errors.password">
 						<template v-slot:append>
 							<q-icon v-if="!visiblePassword" name="visibility" @click="visiblePassword = !visiblePassword" style="cursor: pointer" />
 							<q-icon v-else name="visibility_off" @click="visiblePassword = !visiblePassword" style="cursor: pointer" />
 						</template>
 					</q-input>
-					<q-btn label="Sign up" no-caps unelevated color="primary" class="col-12 col-lg-8" type="submit" :loading="btnLoading" />
+					<q-btn label="Sign up" no-caps unelevated color="primary" class="col-12 col-md-8 col-lg-12" type="submit" :loading="btnLoading" />
 				</q-form>
 			</q-card-section>
     </q-card>

@@ -3,9 +3,9 @@
 
       <q-drawer show-if-above v-model="sidebarExpand.left" side="left" bordered>
         <q-list class="q-pa-sm">
-          <q-item-label header>
+          <q-item clickable dark class="q-pa-lg" @click="$router.push({ name: 'home' })">
             <q-img src="~assets/logo.png" width="45%" />
-          </q-item-label>
+          </q-item>
         </q-list>
         <q-scroll-area :style="'height: ' + ($q.screen.height - 120) + 'px'" class="q-px-md">
           <EssentialLink v-for="(val, i) in essentialLink" :key="i" :model="val" />
@@ -43,19 +43,19 @@ export default {
 
   created() {
     this.essentialLink = [
-      { label: 'home', icon: 'home', url: 'home' },
-      { label: 'search', icon: 'search', url: 'search' },
-      { label: 'explore', icon: 'explore', url: 'explore' },
-      { label: 'reels', icon: 'slideshow', url: 'reels' },
-      { label: 'messages', icon: 'chat', url: 'messages' },
-      { label: 'notifications', icon: 'favorite', url: 'notifications' },
-      { label: 'create', icon: 'add_box', url: 'create' },
-      { label: 'profile', icon: 'explore', url: 'profile' },
-      { label: 'settings', icon: 'settings', url: 'settings' },
-      { label: 'your activity', icon: 'update', url: 'your activity' },
-      { label: 'saved', icon: 'bookmark', url: 'saved' },
-      { label: 'switch appearance', icon: 'dark_mode', url: 'saved' },
-      { label: 'logout', icon: 'logout', url: 'logout' },
+      { label: 'home', slug: 'home', icon: 'home', url: 'home' },
+      { label: 'search', slug: 'search', icon: 'search', url: 'search' },
+      { label: 'explore', slug: 'explore', icon: 'explore', url: 'explore' },
+      { label: 'reels', slug: 'reels', icon: 'slideshow', url: 'reels' },
+      { label: 'messages', slug: 'messages', icon: 'chat', url: 'messages' },
+      { label: 'notifications', slug: 'notifications', icon: 'favorite', url: 'notifications' },
+      { label: 'create', slug: 'create', icon: 'add_box', url: 'create' },
+      { label: 'profile', slug: 'profile', icon: 'explore', url: 'profile' },
+      { label: 'settings', slug: 'settings', icon: 'settings', url: 'settings' },
+      { label: 'your activity', slug: 'activities', icon: 'update', url: 'your activity' },
+      { label: 'saved', slug: 'saved', icon: 'bookmark', url: 'saved' },
+      { label: 'switch appearance', slug: 'switch', icon: 'dark_mode', url: 'saved' },
+      { label: 'logout', slug: 'logout', icon: 'logout', url: 'logout' },
     ]
   },
 

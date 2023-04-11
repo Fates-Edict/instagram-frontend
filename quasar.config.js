@@ -108,7 +108,8 @@ module.exports = configure(function (/* ctx */) {
       // Quasar plugins
       plugins: [
         'LoadingBar',
-        'Notify'
+        'Notify',
+        'LocalStorage'
       ],
       config: {
         loadingBar: { color: 'secondary' }
