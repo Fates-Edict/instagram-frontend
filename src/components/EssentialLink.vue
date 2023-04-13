@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-item v-if="model.url !== 'search'" clickable :class="isActive ? 'text-bold': ''" style="border-radius: 25px;" @click="onClick(model)">
+    <q-item clickable :class="isActive ? 'text-bold': ''" style="border-radius: 5px;" @click="onClick(model)">
       <q-item-section v-if="model.icon" avatar>
         <q-icon :name="model.icon" />
       </q-item-section>
@@ -10,23 +10,24 @@
       </q-item-section>
     </q-item>
 
-    <q-item v-else clickable :class="isActive ? 'text-bold' : ''" style="border-radius: 25px;">
-      <q-popup-proxy v-model="searchState">
-        <q-banner>
-          <template v-slot:avatar>
-            <q-icon name="signal_wifi_off" color="primary" />
-          </template>
-          You have lost connection to the internet. This app is offline.
-        </q-banner>
-      </q-popup-proxy>
-      <q-item-section v-if="model.icon" avatar>
-        <q-icon :name="model.icon" />
-      </q-item-section>
+    <q-dialog v-model="searchModal" full-height >
+      <q-card style="width: 500px;">
+        <q-card-section>
+          <div class="text-h6 text-bold row">
+            <span class="q-mr-auto">Search</span> 
+            <q-btn icon="close" flat @click="searchModal = !searchModal" />
+          </div>
+        </q-card-section>
 
-      <q-item-section>
-        <q-item-label class="text-capitalize">{{ model.label }}</q-item-label>
-      </q-item-section>
-    </q-item>
+        <q-card-section class="q-pt-none">
+          <q-input autofocus filled v-model="modelSearch" label="Search" dense color="dark" @keyup="onSearch">
+            <template v-slot:append>
+              <q-icon name="close" @click="modelSearch = ''" class="cursor-pointer" />
+            </template>
+          </q-input>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
@@ -37,31 +38,13 @@ export default {
   data() {
     return {
       isActive: false,
-      searchState: false
+      searchState: false,
+      searchModal: false,
+      modelSearch: null
     }
   },
   created() {
     if(this.$route.name === this.model.slug) this.isActive = true
-  },
-  watch: {
-    'searchState'() {
-      if(this.searchState) {
-        this.$Helper.destroyLocalStorage('mini')
-        this.$Helper.storeLocalStorage('mini', true)
-        window.dispatchEvent(new CustomEvent('mini-local-storage-changed', {
-          detail: {
-            storage: this.$Helper.getLocalStorage('mini')
-          }
-        }))
-      } else {
-        this.$Helper.updateLocalStorage('mini', false)
-        window.dispatchEvent(new CustomEvent('mini-local-storage-changed', {
-          detail: {
-            storage: this.$Helper.getLocalStorage('mini')
-          }
-        }))
-      }
-    }
   },
   methods: {
     onClick(model) {
@@ -69,9 +52,19 @@ export default {
         const url = model.url
         if(url === 'logout') {
           this.$Helper.destroyLocalStorage('token')
+          this.$Helper.destroyLocalStorage('profile')
           this.$router.push({ name: 'login' })
+        } else if(url === 'search') {
+          this.searchModal = !this.searchModal
         }
       }
+    },
+    
+    onSearch() {
+      let endpoint = `http://127.0.0.1:8000/api/users?search=${this.modelSearch}`
+      this.$axios.get(endpoint).then((response) => {
+        console.log(response)
+      })
     }
   }
 }

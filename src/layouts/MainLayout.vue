@@ -15,7 +15,26 @@
         </q-scroll-area>
       </q-drawer>
 
-      <q-drawer show-if-above v-model="sidebarExpand.right" side="right" bordered>
+      <q-drawer show-if-above v-model="sidebarExpand.right" side="right" bordered :width="400">
+        <q-list class="q-py-xl">
+          <q-item>
+            <q-item-section top avatar>
+              <q-avatar>
+                <q-img v-if="profile.profile" :src="profile.profile" />
+                <q-icon v-else name="account_circle" color="grey" size="xl" />
+              </q-avatar>
+            </q-item-section>
+
+            <q-item-section>
+              <q-item-label>{{ profile.username }}</q-item-label>
+              <q-item-label caption>{{ profile.name }}</q-item-label>
+            </q-item-section>
+
+            <q-item-section side top>
+              <q-btn label="Switch" no-caps flat color="primary" />
+            </q-item-section>
+          </q-item>
+        </q-list>
       </q-drawer>
 
       <q-page-container>
@@ -39,17 +58,11 @@ export default {
       essentialLink: null,
       sidebarExpand: {
         left: false,
-        rght: false
+        right: false
       },
-      miniState: false
+      miniState: false,
+      profile: null
     }
-  },
-
-  mounted() {
-    window.addEventListener('mini-local-storage-changed', (event) => {
-      if(event.detail.storage) this.miniState = true
-      else this.miniState = false
-    })
   },
 
   watch: {
@@ -60,6 +73,8 @@ export default {
   },
 
   created() {
+    const profile = this.$Helper.getLocalStorage('profile')
+    this.profile = profile
     this.essentialLink = [
       { label: 'home', slug: 'home', icon: 'home', url: 'home' },
       { label: 'search', slug: 'search', icon: 'search', url: 'search' },

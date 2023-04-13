@@ -69,7 +69,10 @@ export default {
 			.then((response) => {
 				const data = response.data.data
 				if(response.status === 200 && data.token) {
-					this.$Helper.storeLocalStorage('token', data.token)
+					const token = data.token
+					const user = data.data
+					this.$Helper.storeLocalStorage('token', token)
+					this.$Helper.storeLocalStorage('profile', user)
 					this.$router.push({ name: 'home' })
 				}
 			}).catch((error) => {
