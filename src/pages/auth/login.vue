@@ -56,16 +56,9 @@ export default {
 		})
 	},
 	methods: {
-		// isLoggedIn() {
-		// 	this.$Helper.checkLocalStorage()
-		// 	// 1. Ketika akses halaman login cek dulu ada token atau ngga
-		// 	// 2. Kalau gaada biarin
-		// 	// 3. Kalau ada, ambil token, lalu check kebenaran token dan expirednya
-		// 	// 4. Kalau ok redirect ke halaman utama
-		// 	// 5. Kalau tokennya salah, hapus token & stay di halaman login
-		// },
 		login() {
-			this.$axios.post('http://127.0.0.1:8000/api/authenticate', this.dataModel)
+			const endpoint = this.$Helper.getBaseUrlApi()
+			this.$axios.post(`${endpoint}/api/authenticate`, this.dataModel)
 			.then((response) => {
 				const data = response.data.data
 				if(response.status === 200 && data.token) {

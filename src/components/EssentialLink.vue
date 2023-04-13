@@ -100,7 +100,8 @@ export default {
     onSearch() {
       this.searchIcon = 'pending'
       this.responseSearch = null
-      let endpoint = `http://127.0.0.1:8000/api/users?search=${this.modelSearch}`
+      const baseUrlApi = this.$Helper.getBaseUrlApi()
+      let endpoint = `${baseUrlApi}/api/users?search=${this.modelSearch}`
       this.$axios.get(endpoint).then((response) => {
         if(response.status === 200) {
           const data = response.data.data
